@@ -10,7 +10,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBrandKit }) => {
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+      const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 'auto'
+        : 'smooth';
+      el.scrollIntoView({ behavior, block: 'start' });
     }
   };
 

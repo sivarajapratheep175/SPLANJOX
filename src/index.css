@@ -12,6 +12,10 @@
 }
 
 @layer base {
+  html {
+    scroll-padding-top: 5rem;
+  }
+
   body {
     font-family: var(--font-sans);
   }
@@ -19,6 +23,18 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
     letter-spacing: -0.02em;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }
 
