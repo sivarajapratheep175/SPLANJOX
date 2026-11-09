@@ -15,7 +15,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBrandKit }) => {
   };
 
   return (
-    <section className="relative w-full min-h-screen flex flex-col justify-between pt-24 pb-12 overflow-hidden bg-[#070b14]">
+    <section className="relative w-full min-h-screen flex flex-col justify-between pt-24 pb-[220px] lg:pb-12 overflow-hidden bg-[#070b14]">
       {/* 3D WebGL Background / Stage */}
       <div className="absolute inset-0 z-0">
         <ThreeHeroScene onExploreClick={() => scrollToSection('what-we-do')} />
@@ -92,7 +92,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBrandKit }) => {
       </div>
 
       {/* Down Scroll Prompt */}
-      <div className="relative z-10 flex justify-center pointer-events-auto">
+      <div className="relative z-10 flex justify-center pointer-events-auto sm:hidden lg:flex lg:justify-start lg:pl-4">
         <button
           onClick={() => scrollToSection('what-we-do')}
           className="p-2 rounded-full text-slate-400 hover:text-white transition-colors cursor-pointer"
