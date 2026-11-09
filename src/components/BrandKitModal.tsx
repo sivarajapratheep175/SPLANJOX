@@ -33,60 +33,65 @@ export const BrandKitModal: React.FC<BrandKitModalProps> = ({ isOpen, onClose })
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950/80">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-blue-600/20 border border-blue-500/40 p-1 flex items-center justify-center">
-              <img
-                src="/assets/aistudio/SVG-preview_7aa9f648.png"
-                alt="SPLANJOX"
-                className="w-full h-full object-contain"
-              />
+        <div className="flex flex-col gap-3 px-4 py-4 border-b border-slate-800 bg-slate-950/80 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex items-center justify-between gap-3 lg:justify-start">
+            <div className="flex min-w-0 items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-blue-600/20 border border-blue-500/40 p-1 flex items-center justify-center">
+                <img
+                  src="/assets/aistudio/SVG-preview_7aa9f648.png"
+                  alt="SPLANJOX"
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-white font-['Montserrat']">
+                  SPLANJOX Brand Guidelines & Assets
+                </h3>
+                <p className="text-xs text-sky-400">
+                  Official Visual Identity & System Architecture
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 className="text-base font-bold text-white font-['Montserrat']">
-                SPLANJOX Brand Guidelines & Assets
-              </h3>
-              <p className="text-xs text-sky-400">
-                Official Visual Identity & System Architecture
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            {/* Tab switchers */}
-            <div className="hidden sm:flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800 text-xs">
-              <button
-                onClick={() => setActiveTab('board')}
-                className={`px-3 py-1 rounded-lg font-medium transition-colors cursor-pointer ${
-                  activeTab === 'board' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                Guidelines Board
-              </button>
-              <button
-                onClick={() => setActiveTab('mockup')}
-                className={`px-3 py-1 rounded-lg font-medium transition-colors cursor-pointer ${
-                  activeTab === 'mockup' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                Stationery & Showcase
-              </button>
-              <button
-                onClick={() => setActiveTab('colors')}
-                className={`px-3 py-1 rounded-lg font-medium transition-colors cursor-pointer ${
-                  activeTab === 'colors' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                Color System
-              </button>
-            </div>
-
             <button
               onClick={onClose}
-              className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+              className="shrink-0 p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
               aria-label="Close modal"
             >
               <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Tab switchers */}
+          <div className="flex w-full items-center gap-1 overflow-x-auto bg-slate-900 p-1 rounded-xl border border-slate-800 text-[10px] lg:w-auto sm:text-xs">
+            <button
+              onClick={() => setActiveTab('board')}
+              aria-label="Guidelines Board"
+              className={`shrink-0 whitespace-nowrap px-2 py-1 font-medium transition-colors cursor-pointer sm:px-3 rounded-lg ${
+                activeTab === 'board' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <span className="sm:hidden">Guidelines</span>
+              <span className="hidden sm:inline">Guidelines Board</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('mockup')}
+              aria-label="Stationery & Showcase"
+              className={`shrink-0 whitespace-nowrap px-2 py-1 font-medium transition-colors cursor-pointer sm:px-3 rounded-lg ${
+                activeTab === 'mockup' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <span className="sm:hidden">Showcase</span>
+              <span className="hidden sm:inline">Stationery & Showcase</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('colors')}
+              aria-label="Color System"
+              className={`shrink-0 whitespace-nowrap px-2 py-1 font-medium transition-colors cursor-pointer sm:px-3 rounded-lg ${
+                activeTab === 'colors' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <span className="sm:hidden">Colors</span>
+              <span className="hidden sm:inline">Color System</span>
             </button>
           </div>
         </div>

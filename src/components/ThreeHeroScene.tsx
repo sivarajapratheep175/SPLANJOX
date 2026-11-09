@@ -769,7 +769,7 @@ export const ThreeHeroScene: React.FC<ThreeHeroSceneProps> = ({ onExploreClick }
       <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-[#070b14]/70 via-transparent to-[#070b14]/70" />
 
       {/* Top Floating Badge with Mode Info */}
-      <div className="absolute top-6 left-6 z-10 pointer-events-none">
+      <div className="absolute top-24 right-6 z-10 hidden sm:block pointer-events-none">
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/80 border border-slate-700/60 text-xs font-medium text-slate-300">
           <span className="w-2 h-2 rounded-full bg-blue-500" />
           <span className="text-slate-400">Interactive 3D Engine:</span>
