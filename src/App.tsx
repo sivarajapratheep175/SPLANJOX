@@ -6,54 +6,168 @@
 import React, { useState } from 'react';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
-import { WhatWeDo } from './components/WhatWeDo';
-import { PurposeMissionVision } from './components/PurposeMissionVision';
-import { CoreValues } from './components/CoreValues';
-import { PhilosophySection } from './components/PhilosophySection';
-import { GroupDivisions } from './components/GroupDivisions';
+import { IntroductionSection } from './components/IntroductionSection';
+import { ServicesSection } from './components/ServicesSection';
+import { WhoWeHelpSection } from './components/WhoWeHelpSection';
+import { HowWeWorkSection } from './components/HowWeWorkSection';
+import { OurWorkSection } from './components/OurWorkSection';
+import { AboutSection } from './components/AboutSection';
+import { FutureVisionSection } from './components/FutureVisionSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
 import { BrandKitModal } from './components/BrandKitModal';
+import { ProjectEstimatorModal } from './components/ProjectEstimatorModal';
+import { LegalModals } from './components/LegalModals';
 
 export default function App() {
   const [brandKitOpen, setBrandKitOpen] = useState(false);
+  const [estimatorOpen, setEstimatorOpen] = useState(false);
+  const [legalModalType, setLegalModalType] = useState<'privacy' | 'terms' | null>(null);
+
+  // Pre-filled data state for the contact form when triggered from services or estimator
+  const [contactInitialState, setContactInitialState] = useState<{
+    projectType?: string;
+    timeline?: string;
+    budget?: string;
+    description?: string;
+  }>({});
+
+  const scrollToContact = () => {
+    const el = document.getElementById('contact');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const scrollToServices = () => {
+    const el = document.getElementById('services');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleServiceSelect = (serviceTitle: string) => {
+    setContactInitialState((prev) => ({
+      ...prev,
+      projectType: serviceTitle.includes('MVP')
+        ? 'Startup MVP'
+        : serviceTitle.includes('Website')
+        ? 'Website Development'
+        : serviceTitle.includes('Mobile')
+        ? 'Mobile App Development'
+        : serviceTitle.includes('Backend')
+        ? 'Backend / API'
+        : serviceTitle.includes('Maintenance')
+        ? 'Maintenance'
+        : 'Other',
+      description: `Inquiry regarding: ${serviceTitle}\nWe are interested in discussing scope and development timelines.`,
+    }));
+    scrollToContact();
+  };
+
+  const handleSimilarProjectInquiry = (projectName: string) => {
+    setContactInitialState((prev) => ({
+      ...prev,
+      description: `Inquiry based on case study: "${projectName}"\nWe are looking to develop a similar solution for our business.`,
+    }));
+    scrollToContact();
+  };
+
+  const handleApplyEstimate = (details: {
+    projectType: string;
+    timeline: string;
+    budget: string;
+    description: string;
+  }) => {
+    setContactInitialState({
+      projectType: details.projectType.includes('MVP')
+        ? 'Startup MVP'
+        : details.projectType.includes('Website')
+        ? 'Website Development'
+        : details.projectType.includes('Mobile')
+        ? 'Mobile App Development'
+        : details.projectType.includes('Backend')
+        ? 'Backend / API'
+        : 'Other',
+      timeline: details.timeline,
+      budget: details.budget,
+      description: details.description,
+    });
+    scrollToContact();
+  };
 
   return (
     <div className="min-h-screen bg-[#070b14] text-slate-100 flex flex-col selection:bg-blue-600 selection:text-white">
-      {/* Top Sticky Navigation */}
-      <Navbar onOpenBrandKit={() => setBrandKitOpen(true)} />
+      {/* 1. Header with Blueprint Navigation & "Start Your Project" CTA */}
+      <Navbar
+        onOpenBrandKit={() => setBrandKitOpen(true)}
+        onOpenEstimator={() => setEstimatorOpen(true)}
+        onStartProject={scrollToContact}
+      />
 
-      {/* Main Sections in the exact sequence requested */}
       <main className="flex-grow">
-        {/* 1. Hero: "SPLANJOX: Beyond Innovation. Building the Future." + Three.js 3D Engine */}
-        <HeroSection onOpenBrandKit={() => setBrandKitOpen(true)} />
+        {/* Section 01: Hero with Three.js 3D Scene */}
+        <HeroSection
+          onStartProject={scrollToContact}
+          onExploreServices={scrollToServices}
+          onOpenEstimator={() => setEstimatorOpen(true)}
+        />
 
-        {/* 2. What We Do: Product Development, Software Services, Research & Innovation */}
-        <WhatWeDo />
+        {/* Section 02: Introduction & 3 Stages */}
+        <IntroductionSection onStartProject={scrollToContact} />
 
-        {/* 3. Purpose & Mission (and Vision) */}
-        <PurposeMissionVision />
+        {/* Section 03 & Phase 4: Core Services */}
+        <ServicesSection onSelectServiceForInquiry={handleServiceSelect} />
 
-        {/* 4. Core Values: The 6 values as cards */}
-        <CoreValues />
+        {/* Section 04 & Phase 5: Who We Help */}
+        <WhoWeHelpSection onDiscussIdea={scrollToContact} />
 
-        {/* 5. Philosophy Quote: "We don't build software just because we can. We build software because it solves a problem." */}
-        <PhilosophySection />
+        {/* Section 05 & Phase 6: How We Work (10-Step Workflow) */}
+        <HowWeWorkSection onStartProject={scrollToContact} />
 
-        {/* Group Divisions: SPLANJOX Group structure from official Brand Board */}
-        <GroupDivisions />
+        {/* Section 06 & Phase 7: Our Work / Portfolio */}
+        <OurWorkSection onStartSimilarProject={handleSimilarProjectInquiry} />
 
-        {/* 6. Contact: Email, LinkedIn, simple interactive form */}
-        <ContactSection />
+        {/* Section 08 & Phase 8: About SPLANJOX & Founder */}
+        <AboutSection />
+
+        {/* Section 07 & Phase 9: Future Vision (Current Business vs Future Initiatives) */}
+        <FutureVisionSection onStartProject={scrollToContact} />
+
+        {/* Section 08 & Phase 10: Final CTA & Contact Form */}
+        <ContactSection
+          initialProjectType={contactInitialState.projectType}
+          initialTimeline={contactInitialState.timeline}
+          initialBudget={contactInitialState.budget}
+          initialDescription={contactInitialState.description}
+          onOpenPrivacy={() => setLegalModalType('privacy')}
+          onOpenTerms={() => setLegalModalType('terms')}
+          onOpenEstimator={() => setEstimatorOpen(true)}
+        />
       </main>
 
-      {/* Footer */}
-      <Footer onOpenBrandKit={() => setBrandKitOpen(true)} />
+      {/* Phase 11: Footer */}
+      <Footer
+        onOpenBrandKit={() => setBrandKitOpen(true)}
+        onOpenPrivacy={() => setLegalModalType('privacy')}
+        onOpenTerms={() => setLegalModalType('terms')}
+      />
 
-      {/* Official Brand Kit & Guidelines Modal */}
+      {/* Modals */}
       <BrandKitModal
         isOpen={brandKitOpen}
         onClose={() => setBrandKitOpen(false)}
+      />
+
+      <ProjectEstimatorModal
+        isOpen={estimatorOpen}
+        onClose={() => setEstimatorOpen(false)}
+        onApplyToContact={handleApplyEstimate}
+      />
+
+      <LegalModals
+        type={legalModalType}
+        onClose={() => setLegalModalType(null)}
       />
     </div>
   );
