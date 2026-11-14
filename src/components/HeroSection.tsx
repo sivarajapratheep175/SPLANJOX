@@ -1,108 +1,118 @@
 import React from 'react';
-import { ArrowRight, ChevronDown, Sparkles, MapPin, Layers, Terminal } from 'lucide-react';
-import { ThreeHeroScene } from './ThreeHeroScene';
+import { ArrowRight } from 'lucide-react';
 
 interface HeroSectionProps {
-  onOpenBrandKit: () => void;
+  onStartProject: () => void;
+  onExploreWork: () => void;
 }
 
-export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBrandKit }) => {
-  const scrollToSection = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-        ? 'auto'
-        : 'smooth';
-      el.scrollIntoView({ behavior, block: 'start' });
-    }
-  };
+const CORE_CAPABILITIES = [
+  {
+    step: '01',
+    title: 'Startup MVP & Product Development',
+    detail: 'From initial concept to launch-ready web and mobile products.',
+  },
+  {
+    step: '02',
+    title: 'Software & API Engineering',
+    detail: 'Reliable backend systems, databases, and scalable architecture.',
+  },
+  {
+    step: '03',
+    title: 'Practical AI & Automation',
+    detail: 'Focused integrations that streamline workflows and real operations.',
+  },
+];
 
+export const HeroSection: React.FC<HeroSectionProps> = ({
+  onStartProject,
+  onExploreWork,
+}) => {
   return (
-    <section className="relative w-full min-h-screen flex flex-col justify-between pt-24 pb-[220px] lg:pb-12 overflow-hidden bg-[#070b14]">
-      {/* 3D WebGL Background / Stage */}
-      <div className="absolute inset-0 z-0">
-        <ThreeHeroScene onExploreClick={() => scrollToSection('what-we-do')} />
-      </div>
-
-      {/* Hero Foreground Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full my-auto pointer-events-none">
-        <div className="max-w-3xl pt-8 pb-16">
-          {/* Top Tag & Status Pill */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900/90 border border-blue-500/30 text-xs text-slate-200 mb-6 shadow-lg pointer-events-auto">
-            <span className="flex h-2 w-2 rounded-full bg-blue-500" />
-            <span className="font-semibold text-sky-400">SPLANJOX</span>
-            <span className="text-slate-500">|</span>
-            <span className="text-slate-300">Software • Innovation • Deep Tech</span>
-          </div>
-
-          {/* Main Title */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.08] font-['Montserrat'] mb-6 drop-shadow-md">
-            SPLANJOX
-            <span className="block text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-400 via-sky-300 to-cyan-200 bg-clip-text text-transparent mt-2">
+    <section
+      id="home"
+      className="relative bg-[#080F1C] text-white border-b border-white/10"
+    >
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 lg:py-32">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
+          <div className="lg:col-span-7 space-y-7">
+            <p className="text-xs sm:text-sm font-semibold uppercase tracking-[0.16em] text-[#3B82F6]">
               Beyond Innovation. Building the Future.
-            </span>
-          </h1>
+            </p>
 
-          {/* Narrative text from PDF & Brand Board */}
-          <p className="text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl mb-8 font-normal drop-shadow">
-            We identify real-world challenges and transform them into practical, innovative,
-            and accessible software solutions. Operating across product development,
-            enterprise software services, and frontier research.
-          </p>
+            <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold tracking-tight text-white leading-[1.08]">
+              Turning Ideas Into Powerful Digital Solutions.
+            </h1>
 
-          {/* Action CTAs */}
-          <div className="flex flex-wrap items-center gap-4 pointer-events-auto">
-            <button
-              onClick={() => scrollToSection('what-we-do')}
-              className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 shadow-xl shadow-blue-600/30 hover:shadow-blue-500/50 transition-all cursor-pointer group"
-            >
-              <span>Explore What We Do</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button>
+            <p className="text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl">
+              We help startups transform ideas into practical software solutions
+              through thoughtful design, modern engineering and reliable
+              technology.
+            </p>
 
-            <a
-              href="#contact"
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl text-sm font-semibold text-slate-200 bg-slate-900/90 hover:bg-slate-800 border border-slate-700 hover:border-slate-500 transition-all cursor-pointer shadow-lg"
-            >
-              <span>Contact Us</span>
-            </a>
+            <div className="flex flex-wrap items-center gap-4 pt-2">
+              <button
+                type="button"
+                onClick={onStartProject}
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-[#2563EB] hover:bg-[#3B82F6] text-white text-sm font-semibold transition-colors cursor-pointer"
+              >
+                Start a Project
+                <ArrowRight className="w-4 h-4" />
+              </button>
 
-            <button
-              onClick={onOpenBrandKit}
-              className="inline-flex items-center gap-2 px-4 py-3.5 rounded-xl text-sm font-semibold text-sky-400 hover:text-sky-300 hover:bg-sky-950/30 transition-colors cursor-pointer"
-            >
-              <Sparkles className="w-4 h-4" />
-              <span>Brand Board</span>
-            </button>
+              <button
+                type="button"
+                onClick={onExploreWork}
+                className="inline-flex items-center justify-center px-6 py-3.5 rounded-lg border border-white/20 hover:border-white/40 bg-white/5 hover:bg-white/10 text-white text-sm font-semibold transition-colors cursor-pointer"
+              >
+                Explore Our Work
+              </button>
+            </div>
           </div>
 
-          {/* Founder & Market Spec Footnotes */}
-          <div className="mt-12 pt-6 border-t border-slate-800/80 flex flex-wrap items-center gap-6 text-xs text-slate-400 pointer-events-auto">
-            <div className="flex items-center gap-2">
-              <span className="text-slate-500 uppercase tracking-wider font-mono">Founder:</span>
-              <span className="text-slate-200 font-medium">Sivaraja Pratheep</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <MapPin className="w-3.5 h-3.5 text-blue-400" />
-              <span className="text-slate-200">Sri Lanka to Global Markets</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Terminal className="w-3.5 h-3.5 text-sky-400" />
-              <span className="text-slate-200">Problem-First Architecture</span>
+          <div className="lg:col-span-5">
+            <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 sm:p-8 space-y-6">
+              <div className="flex items-center gap-4 pb-6 border-b border-white/10">
+                <div className="w-14 h-14 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center p-2.5 shrink-0">
+                  <img
+                    src="/assets/aistudio/SVG-preview_7aa9f648.png"
+                    alt="SPLANJOX official emblem"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+                <div>
+                  <div className="text-lg font-bold tracking-wide text-white">
+                    SPLANJOX
+                  </div>
+                  <div className="text-sm text-slate-400">
+                    Startup Technology &amp; Software Solutions · Sri Lanka
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                {CORE_CAPABILITIES.map((item) => (
+                  <div
+                    key={item.step}
+                    className="flex items-start gap-4 p-3.5 rounded-xl border border-white/5 bg-white/[0.02]"
+                  >
+                    <span className="text-xs font-semibold text-[#3B82F6] pt-0.5 tabular-nums">
+                      {item.step}
+                    </span>
+                    <div>
+                      <h2 className="text-sm font-semibold text-white">
+                        {item.title}
+                      </h2>
+                      <p className="text-xs sm:text-sm text-slate-400 mt-1 leading-relaxed">
+                        {item.detail}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Down Scroll Prompt */}
-      <div className="relative z-10 flex justify-center pointer-events-auto sm:hidden lg:flex lg:justify-start lg:pl-4">
-        <button
-          onClick={() => scrollToSection('what-we-do')}
-          className="p-2 rounded-full text-slate-400 hover:text-white transition-colors cursor-pointer"
-          aria-label="Scroll down to What We Do"
-        >
-          <ChevronDown className="w-5 h-5 animate-bounce text-sky-400" />
-        </button>
       </div>
     </section>
   );

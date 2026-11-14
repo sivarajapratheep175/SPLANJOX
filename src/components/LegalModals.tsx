@@ -1,5 +1,5 @@
-import React from 'react';
-import { X, ShieldCheck, FileText, CheckCircle2 } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { FileText, ShieldCheck, X } from 'lucide-react';
 
 interface LegalModalProps {
   type: 'privacy' | 'terms' | null;
@@ -7,127 +7,156 @@ interface LegalModalProps {
 }
 
 export const LegalModals: React.FC<LegalModalProps> = ({ type, onClose }) => {
+  useEffect(() => {
+    if (!type) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [type, onClose]);
+
   if (!type) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
-      <div 
-        className="relative w-full max-w-3xl max-h-[90vh] flex flex-col rounded-3xl bg-[#0b1220] border border-slate-700 shadow-2xl overflow-hidden"
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#080F1C]/70 backdrop-blur-sm"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="legal-modal-title"
+    >
+      <div
+        className="w-full max-w-2xl max-h-[85vh] flex flex-col rounded-2xl bg-white border border-slate-200 shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950/80">
+        <div className="flex items-center justify-between gap-4 px-6 py-5 border-b border-slate-200">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-sky-400">
-              {type === 'privacy' ? <ShieldCheck className="w-5 h-5" /> : <FileText className="w-5 h-5" />}
+            <div className="w-9 h-9 rounded-xl bg-[#F8FAFC] border border-slate-200 flex items-center justify-center text-[#2563EB]">
+              {type === 'privacy' ? (
+                <ShieldCheck className="w-5 h-5" />
+              ) : (
+                <FileText className="w-5 h-5" />
+              )}
             </div>
             <div>
-              <h3 className="text-base font-bold text-white font-['Montserrat']">
-                {type === 'privacy' ? 'SPLANJOX Privacy Policy' : 'SPLANJOX Terms of Service'}
+              <h3
+                id="legal-modal-title"
+                className="text-base font-bold text-[#080F1C]"
+              >
+                {type === 'privacy'
+                  ? 'SPLANJOX Privacy Policy'
+                  : 'SPLANJOX Terms of Service'}
               </h3>
-              <p className="text-xs text-slate-400">
-                Last updated: 2026 • Effective for all client engagements
+              <p className="text-xs text-[#64748B]">
+                Updated 2026 · Effective for website &amp; client inquiries
               </p>
             </div>
           </div>
+
           <button
+            type="button"
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
-            aria-label="Close"
+            className="w-10 h-10 rounded-lg flex items-center justify-center text-slate-500 hover:text-[#080F1C] hover:bg-slate-100 transition-colors cursor-pointer"
+            aria-label="Close legal dialog"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Content */}
-        <div className="p-6 overflow-y-auto space-y-5 text-xs sm:text-sm text-slate-300 leading-relaxed">
+        <div className="flex-1 min-h-0 overflow-y-auto px-6 py-6 space-y-5 text-sm text-[#64748B] leading-relaxed">
           {type === 'privacy' ? (
             <>
               <div>
-                <h4 className="text-sm font-bold text-white font-['Montserrat'] mb-2">
+                <h4 className="text-sm font-bold text-[#080F1C] mb-1.5">
                   1. Information We Collect
                 </h4>
                 <p>
-                  When you submit an inquiry through our website, we collect your name, email address, company or startup name, and project specifications. We do not sell, rent, or lease your private inquiry information to third-party advertisers or brokers under any circumstance.
+                  When you submit an inquiry through this website, we collect
+                  your name, email address, selected project type, and project
+                  description. We do not sell, rent, or distribute your inquiry
+                  data to third-party brokers or advertisers.
                 </p>
               </div>
-
               <div>
-                <h4 className="text-sm font-bold text-white font-['Montserrat'] mb-2">
-                  2. Project Confidentiality & Non-Disclosure
+                <h4 className="text-sm font-bold text-[#080F1C] mb-1.5">
+                  2. Project Confidentiality
                 </h4>
                 <p>
-                  We treat all startup ideas, business models, and technical requirements shared with SPLANJOX as strictly confidential. Client project details, proprietary concepts, and source code are never published or shared publicly without prior written authorization.
+                  All startup concepts, technical requirements, and business
+                  context shared with SPLANJOX are treated as confidential and
+                  used strictly to evaluate and respond to your inquiry.
                 </p>
               </div>
-
               <div>
-                <h4 className="text-sm font-bold text-white font-['Montserrat'] mb-2">
-                  3. Data Security & Storage
+                <h4 className="text-sm font-bold text-[#080F1C] mb-1.5">
+                  3. Data Retention &amp; Deletion
                 </h4>
                 <p>
-                  We implement industry-standard encryption protocols (HTTPS/TLS) across all communications and secure server storage. Access to project records is restricted strictly to assigned development personnel.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="text-sm font-bold text-white font-['Montserrat'] mb-2">
-                  4. Your Rights
-                </h4>
-                <p>
-                  You may request the full deletion of your contact records or project inquiry data at any time by contacting our founder directly at{' '}
-                  <span className="text-sky-400 font-mono">sivarajapratheep175@gmail.com</span>.
+                  You may request deletion of your contact inquiry at any time by
+                  emailing{' '}
+                  <a
+                    href="mailto:sivarajapratheep175@gmail.com"
+                    className="text-[#2563EB] font-medium hover:underline"
+                  >
+                    sivarajapratheep175@gmail.com
+                  </a>
+                  .
                 </p>
               </div>
             </>
           ) : (
             <>
               <div>
-                <h4 className="text-sm font-bold text-white font-['Montserrat'] mb-2">
-                  1. Engagement & Scope of Work
+                <h4 className="text-sm font-bold text-[#080F1C] mb-1.5">
+                  1. Scope of Engagements
                 </h4>
                 <p>
-                  All software services, web development, mobile application builds, and MVP projects are governed by an itemized Scope of Work (SOW) mutually reviewed and approved prior to commencement.
+                  All software development, MVP engineering, and consulting
+                  services are governed by a mutually agreed Scope of Work (SOW)
+                  reviewed prior to project kickoff.
                 </p>
               </div>
-
               <div>
-                <h4 className="text-sm font-bold text-white font-['Montserrat'] mb-2">
-                  2. 100% Client Intellectual Property (IP) Ownership
+                <h4 className="text-sm font-bold text-[#080F1C] mb-1.5">
+                  2. Intellectual Property Ownership
                 </h4>
                 <p>
-                  Upon final milestone delivery and payment settlement, full ownership of all custom software code, databases, design assets, and credentials transfers entirely to the client. SPLANJOX retains no proprietary lock-in on custom client codebases.
+                  Upon milestone completion and settlement, ownership of custom
+                  deliverables, source code, and project assets transfers
+                  directly to the client unless explicitly stated otherwise in
+                  writing.
                 </p>
               </div>
-
               <div>
-                <h4 className="text-sm font-bold text-white font-['Montserrat'] mb-2">
-                  3. Milestone-Based Payments
+                <h4 className="text-sm font-bold text-[#080F1C] mb-1.5">
+                  3. Communication &amp; Support
                 </h4>
                 <p>
-                  Projects typically operate on structured milestones (e.g., initial discovery & design, core sprint development, final testing & deployment). This protects both the founder and the engineering team by tying disbursements to tangible functional demos.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="text-sm font-bold text-white font-['Montserrat'] mb-2">
-                  4. Warranty & Technical Support
-                </h4>
-                <p>
-                  Every completed project includes a standard post-launch bug-fix warranty period. Extended maintenance and feature enhancement packages are available on monthly agreements.
+                  For questions regarding active engagements or terms, contact
+                  SPLANJOX directly at{' '}
+                  <a
+                    href="mailto:sivarajapratheep175@gmail.com"
+                    className="text-[#2563EB] font-medium hover:underline"
+                  >
+                    sivarajapratheep175@gmail.com
+                  </a>
+                  .
                 </p>
               </div>
             </>
           )}
         </div>
 
-        {/* Footer */}
-        <div className="px-6 py-4 border-t border-slate-800 bg-slate-950/90 flex justify-end">
+        <div className="px-6 py-4 border-t border-slate-200 bg-[#F8FAFC] flex justify-end">
           <button
+            type="button"
             onClick={onClose}
-            className="px-5 py-2 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 cursor-pointer"
+            className="px-5 py-2.5 rounded-lg bg-[#080F1C] hover:bg-slate-800 text-white text-sm font-semibold transition-colors cursor-pointer"
           >
-            I Understand
+            Close
           </button>
         </div>
       </div>

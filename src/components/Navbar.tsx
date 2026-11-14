@@ -1,184 +1,129 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, X, ArrowUpRight, Palette, Calculator, Sparkles } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Menu, X } from 'lucide-react';
 
 interface NavbarProps {
-  onOpenBrandKit: () => void;
-  onOpenEstimator: () => void;
   onStartProject: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({
-  onOpenBrandKit,
-  onOpenEstimator,
-  onStartProject,
-}) => {
-  const [isScrolled, setIsScrolled] = useState(false);
+const NAV_LINKS = [
+  { label: 'Home', href: '#home' },
+  { label: 'What We Do', href: '#what-we-do' },
+  { label: 'Our Work', href: '#our-work' },
+  { label: 'About', href: '#about' },
+  { label: 'Contact', href: '#contact' },
+];
+
+export const Navbar: React.FC<NavbarProps> = ({ onStartProject }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setMobileMenuOpen(false);
+      }
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const navLinks = [
-    { name: 'Home', href: '#hero' },
-    { name: 'Services', href: '#services' },
-    { name: 'Who We Help', href: '#who-we-help' },
-    { name: 'How We Work', href: '#how-we-work' },
-    { name: 'Our Work', href: '#our-work' },
-    { name: 'About', href: '#about' },
-    { name: 'Future Vision', href: '#future-vision' },
-    { name: 'Contact', href: '#contact' },
-  ];
+  const handleNavClick = (href: string) => {
+    setMobileMenuOpen(false);
+    const id = href.replace('#', '');
+    const target = document.getElementById(id);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-[#070b14]/95 border-b border-slate-800 shadow-xl shadow-black/50 backdrop-blur-md'
-          : 'bg-transparent border-b border-transparent'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          {/* Logo & Brand Identification */}
-          <a href="#hero" className="flex items-center gap-3 group">
-            <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-[#0b1220] border border-blue-500/30 flex items-center justify-center p-1.5 shadow-md shadow-blue-500/20 group-hover:border-sky-400 transition-colors">
-              <img
-                src="/assets/aistudio/SVG-preview_7aa9f648.png"
-                alt="SPLANJOX Logo"
-                className="w-full h-full object-contain"
-              />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-extrabold text-xl tracking-wider text-white font-['Montserrat'] flex items-center gap-1.5">
-                SPLANJOX
-              </span>
-              <span className="text-[10px] tracking-widest text-sky-400 font-medium uppercase">
-                From Ideas to Digital Reality
-              </span>
-            </div>
+    <header className="sticky top-0 z-40 bg-[#080F1C]/95 backdrop-blur-md border-b border-white/10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="h-16 flex items-center justify-between gap-4">
+          <a
+            href="#home"
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavClick('#home');
+            }}
+            className="flex items-center gap-3 shrink-0 focus-visible:outline-2 focus-visible:outline-[#3B82F6] rounded-md"
+          >
+            <img
+              src="/assets/aistudio/SVG-preview_7aa9f648.png"
+              alt="SPLANJOX logo"
+              className="h-8 w-8 object-contain"
+            />
+            <span className="font-bold text-white tracking-wider text-base whitespace-nowrap">
+              SPLANJOX
+            </span>
           </a>
 
-          {/* Desktop Navigation Links (8 navigation items per Blueprint) */}
-          <nav className="hidden xl:flex items-center gap-6">
-            {navLinks.map((link) => (
+          <nav aria-label="Primary Navigation" className="hidden md:flex items-center gap-7">
+            {NAV_LINKS.map((link) => (
               <a
-                key={link.name}
+                key={link.href}
                 href={link.href}
-                className="text-xs font-semibold text-slate-300 hover:text-sky-400 transition-colors"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick(link.href);
+                }}
+                className="text-sm font-medium text-slate-300 hover:text-white transition-colors whitespace-nowrap shrink-0"
               >
-                {link.name}
+                {link.label}
               </a>
             ))}
           </nav>
 
-          {/* Right Action Buttons */}
-          <div className="hidden lg:flex items-center gap-2.5">
+          <div className="hidden md:flex items-center shrink-0">
             <button
-              onClick={onOpenEstimator}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-300 bg-slate-900/80 border border-slate-700/80 hover:text-white hover:border-slate-500 transition-all cursor-pointer"
-              title="Estimate timeline and cost"
-            >
-              <Calculator className="w-3.5 h-3.5 text-sky-400" />
-              <span>Cost Calculator</span>
-            </button>
-
-            <button
-              onClick={onOpenBrandKit}
-              className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
-              title="Brand Guidelines & Assets"
-            >
-              <Palette className="w-4 h-4 text-sky-400" />
-            </button>
-
-            {/* Header Primary CTA as specified in Phase 2 */}
-            <button
+              type="button"
               onClick={onStartProject}
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-600/30 hover:shadow-blue-500/50 transition-all cursor-pointer"
+              className="px-4 py-2 rounded-lg bg-[#2563EB] hover:bg-[#3B82F6] text-white text-sm font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             >
-              <span>Start Your Project</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
+              Let&apos;s Talk
             </button>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="flex lg:hidden items-center gap-2">
-            <button
-              onClick={onOpenEstimator}
-              className="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 hover:text-white cursor-pointer"
-              title="Cost Calculator"
-            >
-              <Calculator className="w-4 h-4 text-sky-400" />
-            </button>
-            <button
-              onClick={onStartProject}
-              className="px-3 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-bold shadow-md cursor-pointer"
-            >
-              Start
-            </button>
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 hover:text-white cursor-pointer ml-1"
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen((prev) => !prev)}
+            className="md:hidden inline-flex items-center justify-center w-11 h-11 rounded-lg text-slate-200 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-navigation"
+            aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+          >
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-[#070b14]/98 border-b border-slate-800 px-4 pt-3 pb-6 space-y-3">
-          <div className="flex flex-col space-y-1.5">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-lg text-sm font-semibold text-slate-200 hover:bg-slate-900 hover:text-sky-400 transition-colors"
-              >
-                {link.name}
-              </a>
-            ))}
-          </div>
-
-          <div className="pt-3 border-t border-slate-800 flex flex-col gap-2">
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenEstimator();
+        <div
+          id="mobile-navigation"
+          className="md:hidden border-t border-white/10 bg-[#080F1C] px-4 py-4 space-y-1"
+        >
+          {NAV_LINKS.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick(link.href);
               }}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-300 bg-slate-900 border border-slate-700 cursor-pointer"
+              className="flex items-center min-h-[44px] px-3 rounded-lg text-sm font-medium text-slate-200 hover:text-white hover:bg-white/5 transition-colors"
             >
-              <Calculator className="w-4 h-4 text-sky-400" />
-              <span>Project Cost & Timeline Estimator</span>
-            </button>
-
+              {link.label}
+            </a>
+          ))}
+          <div className="pt-2">
             <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenBrandKit();
-              }}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white bg-slate-900/60 border border-slate-800 cursor-pointer"
-            >
-              <Palette className="w-3.5 h-3.5 text-sky-400" />
-              <span>Brand Guidelines & Assets</span>
-            </button>
-
-            <button
+              type="button"
               onClick={() => {
                 setMobileMenuOpen(false);
                 onStartProject();
               }}
-              className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 shadow-md cursor-pointer"
+              className="w-full min-h-[44px] rounded-lg bg-[#2563EB] hover:bg-[#3B82F6] text-white text-sm font-semibold transition-colors cursor-pointer"
             >
-              <span>Start Your Project</span>
-              <ArrowUpRight className="w-4 h-4" />
+              Let&apos;s Talk
             </button>
           </div>
         </div>
