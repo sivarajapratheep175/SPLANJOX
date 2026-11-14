@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ArrowRight, Code2, Cpu, Layers, X } from 'lucide-react';
 
 interface ServiceDetail {
@@ -86,16 +86,48 @@ export const WhatWeDoSection: React.FC<WhatWeDoSectionProps> = ({
   onSelectService,
 }) => {
   const [selectedService, setSelectedService] = useState<ServiceDetail | null>(null);
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
+    if (!selectedService) return;
+
+    previousFocusRef.current = document.activeElement as HTMLElement | null;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    closeButtonRef.current?.focus();
+
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setSelectedService(null);
+        return;
+      }
+      if (event.key === 'Tab' && dialogRef.current) {
+        const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
       }
     };
+
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+      previousFocusRef.current?.focus();
+    };
+  }, [selectedService]);
 
   return (
     <section
@@ -122,7 +154,7 @@ export const WhatWeDoSection: React.FC<WhatWeDoSectionProps> = ({
             return (
               <article
                 key={service.id}
-                className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-7 hover:border-slate-300 transition-colors"
+                className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 sm:p-7 hover:border-slate-300 transition-colors"
               >
                 <div>
                   <div className="flex items-center justify-between mb-6">
@@ -159,7 +191,7 @@ export const WhatWeDoSection: React.FC<WhatWeDoSectionProps> = ({
                 <button
                   type="button"
                   onClick={() => setSelectedService(service)}
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-[#2563EB] hover:text-[#080F1C] transition-colors cursor-pointer self-start py-1"
+                  className="inline-flex items-center gap-2 min-h-[40px] text-sm font-semibold text-[#2563EB] hover:text-[#080F1C] rounded transition-colors cursor-pointer self-start py-1"
                 >
                   Learn More
                   <ArrowRight className="w-4 h-4" />
@@ -179,10 +211,11 @@ export const WhatWeDoSection: React.FC<WhatWeDoSectionProps> = ({
           aria-labelledby="service-modal-title"
         >
           <div
+            ref={dialogRef}
             className="w-full max-w-xl max-h-[85vh] flex flex-col rounded-2xl bg-white border border-slate-200 shadow-2xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-start justify-between gap-4 px-6 py-5 border-b border-slate-200">
+            <div className="flex items-start justify-between gap-4 px-5 sm:px-6 py-5 border-b border-slate-200">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wider text-[#2563EB]">
                   Service {selectedService.number}
@@ -195,16 +228,17 @@ export const WhatWeDoSection: React.FC<WhatWeDoSectionProps> = ({
                 </h3>
               </div>
               <button
+                ref={closeButtonRef}
                 type="button"
                 onClick={() => setSelectedService(null)}
-                className="w-10 h-10 rounded-lg flex items-center justify-center text-slate-500 hover:text-[#080F1C] hover:bg-slate-100 transition-colors cursor-pointer"
+                className="w-11 h-11 rounded-lg flex items-center justify-center text-slate-500 hover:text-[#080F1C] hover:bg-slate-100 transition-colors cursor-pointer"
                 aria-label="Close service details"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="flex-1 min-h-0 overflow-y-auto px-6 py-6 space-y-6">
+            <div className="flex-1 min-h-0 overflow-y-auto px-5 sm:px-6 py-6 space-y-6">
               <p className="text-sm sm:text-base text-[#64748B] leading-relaxed">
                 {selectedService.summary}
               </p>
@@ -244,11 +278,11 @@ export const WhatWeDoSection: React.FC<WhatWeDoSectionProps> = ({
               </div>
             </div>
 
-            <div className="px-6 py-4 border-t border-slate-200 bg-[#F8FAFC] flex items-center justify-end gap-3">
+            <div className="px-5 sm:px-6 py-4 border-t border-slate-200 bg-[#F8FAFC] flex flex-wrap items-center justify-end gap-3">
               <button
                 type="button"
                 onClick={() => setSelectedService(null)}
-                className="px-4 py-2.5 rounded-lg text-sm font-medium text-[#64748B] hover:text-[#080F1C] transition-colors cursor-pointer"
+                className="min-h-[44px] px-4 py-2.5 rounded-lg text-sm font-medium text-[#64748B] hover:text-[#080F1C] transition-colors cursor-pointer"
               >
                 Close
               </button>
@@ -259,7 +293,7 @@ export const WhatWeDoSection: React.FC<WhatWeDoSectionProps> = ({
                   setSelectedService(null);
                   onSelectService(chosen.projectType, chosen.title);
                 }}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#2563EB] hover:bg-[#3B82F6] text-white text-sm font-semibold transition-colors cursor-pointer"
+                className="inline-flex items-center gap-2 min-h-[44px] px-5 py-2.5 rounded-lg bg-[#2563EB] hover:bg-[#3B82F6] text-white text-sm font-semibold transition-colors cursor-pointer"
               >
                 Discuss {selectedService.title}
                 <ArrowRight className="w-4 h-4" />

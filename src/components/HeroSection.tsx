@@ -33,14 +33,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       id="home"
       className="relative bg-[#080F1C] text-white border-b border-white/10"
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 lg:py-32">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
-          <div className="lg:col-span-7 space-y-7">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-32">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+          <div className="lg:col-span-7 space-y-6 sm:space-y-7">
             <p className="text-xs sm:text-sm font-semibold uppercase tracking-[0.16em] text-[#3B82F6]">
               Beyond Innovation. Building the Future.
             </p>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-bold tracking-tight text-white leading-[1.08]">
+            <h1 className="text-3xl sm:text-5xl lg:text-[3.5rem] font-bold tracking-tight text-white leading-[1.08]">
               Turning Ideas Into Powerful Digital Solutions.
             </h1>
 
@@ -50,11 +50,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               technology.
             </p>
 
-            <div className="flex flex-wrap items-center gap-4 pt-2">
+            <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3.5 sm:gap-4 pt-2">
               <button
                 type="button"
                 onClick={onStartProject}
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-[#2563EB] hover:bg-[#3B82F6] text-white text-sm font-semibold transition-colors cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 min-h-[44px] px-6 py-3.5 rounded-lg bg-[#2563EB] hover:bg-[#3B82F6] text-white text-sm font-semibold transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               >
                 Start a Project
                 <ArrowRight className="w-4 h-4" />
@@ -63,7 +63,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <button
                 type="button"
                 onClick={onExploreWork}
-                className="inline-flex items-center justify-center px-6 py-3.5 rounded-lg border border-white/20 hover:border-white/40 bg-white/5 hover:bg-white/10 text-white text-sm font-semibold transition-colors cursor-pointer"
+                className="inline-flex items-center justify-center min-h-[44px] px-6 py-3.5 rounded-lg border border-white/20 hover:border-white/40 bg-white/5 hover:bg-white/10 text-white text-sm font-semibold transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               >
                 Explore Our Work
               </button>
@@ -71,35 +71,37 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
 
           <div className="lg:col-span-5">
-            <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 sm:p-8 space-y-6">
-              <div className="flex items-center gap-4 pb-6 border-b border-white/10">
+            <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-8 space-y-5 sm:space-y-6">
+              <div className="flex items-center gap-4 pb-5 sm:pb-6 border-b border-white/10">
                 <div className="w-14 h-14 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center p-2.5 shrink-0">
                   <img
                     src="/assets/aistudio/SVG-preview_7aa9f648.png"
-                    alt="SPLANJOX official emblem"
+                    alt="SPLANJOX official S-symbol emblem"
+                    width={36}
+                    height={36}
                     className="w-full h-full object-contain"
                   />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <div className="text-lg font-bold tracking-wide text-white">
                     SPLANJOX
                   </div>
-                  <div className="text-sm text-slate-400">
+                  <div className="text-xs sm:text-sm text-slate-400">
                     Startup Technology &amp; Software Solutions · Sri Lanka
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-3.5 sm:space-y-4">
                 {CORE_CAPABILITIES.map((item) => (
                   <div
                     key={item.step}
-                    className="flex items-start gap-4 p-3.5 rounded-xl border border-white/5 bg-white/[0.02]"
+                    className="flex items-start gap-3.5 sm:gap-4 p-3.5 rounded-xl border border-white/5 bg-white/[0.02]"
                   >
-                    <span className="text-xs font-semibold text-[#3B82F6] pt-0.5 tabular-nums">
+                    <span className="text-xs font-semibold text-[#3B82F6] pt-0.5 tabular-nums shrink-0">
                       {item.step}
                     </span>
-                    <div>
+                    <div className="min-w-0">
                       <h2 className="text-sm font-semibold text-white">
                         {item.title}
                       </h2>

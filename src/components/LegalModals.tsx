@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { FileText, ShieldCheck, X } from 'lucide-react';
 
 interface LegalModalProps {
@@ -7,15 +7,47 @@ interface LegalModalProps {
 }
 
 export const LegalModals: React.FC<LegalModalProps> = ({ type, onClose }) => {
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+
   useEffect(() => {
     if (!type) return;
+
+    previousFocusRef.current = document.activeElement as HTMLElement | null;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    closeButtonRef.current?.focus();
+
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         onClose();
+        return;
+      }
+      if (event.key === 'Tab' && dialogRef.current) {
+        const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
       }
     };
+
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+      previousFocusRef.current?.focus();
+    };
   }, [type, onClose]);
 
   if (!type) return null;
@@ -29,12 +61,13 @@ export const LegalModals: React.FC<LegalModalProps> = ({ type, onClose }) => {
       aria-labelledby="legal-modal-title"
     >
       <div
+        ref={dialogRef}
         className="w-full max-w-2xl max-h-[85vh] flex flex-col rounded-2xl bg-white border border-slate-200 shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between gap-4 px-6 py-5 border-b border-slate-200">
+        <div className="flex items-center justify-between gap-4 px-5 sm:px-6 py-5 border-b border-slate-200">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-[#F8FAFC] border border-slate-200 flex items-center justify-center text-[#2563EB]">
+            <div className="w-9 h-9 rounded-xl bg-[#F8FAFC] border border-slate-200 flex items-center justify-center text-[#2563EB] shrink-0">
               {type === 'privacy' ? (
                 <ShieldCheck className="w-5 h-5" />
               ) : (
@@ -51,55 +84,68 @@ export const LegalModals: React.FC<LegalModalProps> = ({ type, onClose }) => {
                   : 'SPLANJOX Terms of Service'}
               </h3>
               <p className="text-xs text-[#64748B]">
-                Updated 2026 · Effective for website &amp; client inquiries
+                Updated November 2026 · Website &amp; Client Inquiries
               </p>
             </div>
           </div>
 
           <button
+            ref={closeButtonRef}
             type="button"
             onClick={onClose}
-            className="w-10 h-10 rounded-lg flex items-center justify-center text-slate-500 hover:text-[#080F1C] hover:bg-slate-100 transition-colors cursor-pointer"
+            className="w-11 h-11 rounded-lg flex items-center justify-center text-slate-500 hover:text-[#080F1C] hover:bg-slate-100 transition-colors cursor-pointer"
             aria-label="Close legal dialog"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="flex-1 min-h-0 overflow-y-auto px-6 py-6 space-y-5 text-sm text-[#64748B] leading-relaxed">
+        <div className="flex-1 min-h-0 overflow-y-auto px-5 sm:px-6 py-6 space-y-5 text-sm text-[#64748B] leading-relaxed">
           {type === 'privacy' ? (
             <>
               <div>
                 <h4 className="text-sm font-bold text-[#080F1C] mb-1.5">
-                  1. Information We Collect
+                  1. Information Collected via the Inquiry Form
                 </h4>
                 <p>
-                  When you submit an inquiry through this website, we collect
-                  your name, email address, selected project type, and project
-                  description. We do not sell, rent, or distribute your inquiry
-                  data to third-party brokers or advertisers.
+                  When you submit a project inquiry on splanjox.vercel.app, we
+                  collect only the fields you enter: your full name, email
+                  address, selected project type, and project description.
+                  Submissions are transmitted over HTTPS solely so SPLANJOX can
+                  review and reply to your inquiry.
                 </p>
               </div>
               <div>
                 <h4 className="text-sm font-bold text-[#080F1C] mb-1.5">
-                  2. Project Confidentiality
+                  2. Cookies &amp; Analytics
                 </h4>
                 <p>
-                  All startup concepts, technical requirements, and business
-                  context shared with SPLANJOX are treated as confidential and
-                  used strictly to evaluate and respond to your inquiry.
+                  This website does not place advertising cookies or sell
+                  visitor data to third-party brokers. Basic server request
+                  metadata (such as IP-based rate limiting) is used strictly to
+                  prevent automated spam submissions.
                 </p>
               </div>
               <div>
                 <h4 className="text-sm font-bold text-[#080F1C] mb-1.5">
-                  3. Data Retention &amp; Deletion
+                  3. Project Confidentiality
                 </h4>
                 <p>
-                  You may request deletion of your contact inquiry at any time by
-                  emailing{' '}
+                  Startup concepts, technical specifications, and product
+                  requirements shared with SPLANJOX are treated confidentially
+                  and are never published without prior written consent.
+                </p>
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-[#080F1C] mb-1.5">
+                  4. Data Deletion Requests
+                </h4>
+                <p>
+                  You may request access to or deletion of any inquiry data at
+                  any time by emailing{' '}
                   <a
                     href="mailto:sivarajapratheep175@gmail.com"
-                    className="text-[#2563EB] font-medium hover:underline"
+                    className="text-[#2563EB] font-medium hover:underline break-all"
                   >
                     sivarajapratheep175@gmail.com
                   </a>
@@ -111,35 +157,48 @@ export const LegalModals: React.FC<LegalModalProps> = ({ type, onClose }) => {
             <>
               <div>
                 <h4 className="text-sm font-bold text-[#080F1C] mb-1.5">
-                  1. Scope of Engagements
+                  1. Current Services &amp; Project Scope
                 </h4>
                 <p>
-                  All software development, MVP engineering, and consulting
-                  services are governed by a mutually agreed Scope of Work (SOW)
-                  reviewed prior to project kickoff.
+                  SPLANJOX currently provides startup MVP development, custom
+                  web and mobile application development, backend and API
+                  engineering, deployment support, and practical AI automation.
+                  Specific deliverables, timelines, and pricing are defined in a
+                  written Scope of Work agreed upon prior to kickoff.
                 </p>
               </div>
               <div>
                 <h4 className="text-sm font-bold text-[#080F1C] mb-1.5">
-                  2. Intellectual Property Ownership
+                  2. Client Intellectual Property Ownership
                 </h4>
                 <p>
-                  Upon milestone completion and settlement, ownership of custom
-                  deliverables, source code, and project assets transfers
-                  directly to the client unless explicitly stated otherwise in
-                  writing.
+                  Upon completion of agreed milestones and payment settlement,
+                  ownership of custom project source code and deliverables
+                  transfers to the client unless explicitly stated otherwise in
+                  the signed Scope of Work.
                 </p>
               </div>
               <div>
                 <h4 className="text-sm font-bold text-[#080F1C] mb-1.5">
-                  3. Communication &amp; Support
+                  3. Website Information &amp; Future Roadmap
                 </h4>
                 <p>
-                  For questions regarding active engagements or terms, contact
-                  SPLANJOX directly at{' '}
+                  Sections describing long-term innovation areas (such as AI
+                  research, EdTech, FinTech, and smart devices) represent
+                  future areas of exploration rather than currently active
+                  commercial divisions.
+                </p>
+              </div>
+              <div>
+                <h4 className="text-sm font-bold text-[#080F1C] mb-1.5">
+                  4. Contact
+                </h4>
+                <p>
+                  Questions regarding these terms or active client engagements
+                  can be sent directly to{' '}
                   <a
                     href="mailto:sivarajapratheep175@gmail.com"
-                    className="text-[#2563EB] font-medium hover:underline"
+                    className="text-[#2563EB] font-medium hover:underline break-all"
                   >
                     sivarajapratheep175@gmail.com
                   </a>
@@ -150,11 +209,11 @@ export const LegalModals: React.FC<LegalModalProps> = ({ type, onClose }) => {
           )}
         </div>
 
-        <div className="px-6 py-4 border-t border-slate-200 bg-[#F8FAFC] flex justify-end">
+        <div className="px-5 sm:px-6 py-4 border-t border-slate-200 bg-[#F8FAFC] flex justify-end">
           <button
             type="button"
             onClick={onClose}
-            className="px-5 py-2.5 rounded-lg bg-[#080F1C] hover:bg-slate-800 text-white text-sm font-semibold transition-colors cursor-pointer"
+            className="min-h-[44px] px-5 py-2.5 rounded-lg bg-[#080F1C] hover:bg-slate-800 text-white text-sm font-semibold transition-colors cursor-pointer"
           >
             Close
           </button>

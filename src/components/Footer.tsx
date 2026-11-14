@@ -32,7 +32,9 @@ export const Footer: React.FC<FooterProps> = ({
             <div className="flex items-center gap-3">
               <img
                 src="/assets/aistudio/SVG-preview_7aa9f648.png"
-                alt="SPLANJOX logo"
+                alt="SPLANJOX official S-symbol logo"
+                width={32}
+                height={32}
                 className="h-8 w-8 object-contain"
               />
               <span className="font-bold text-white tracking-wider text-base">
@@ -59,7 +61,7 @@ export const Footer: React.FC<FooterProps> = ({
                       e.preventDefault();
                       handleScroll(link.href);
                     }}
-                    className="text-sm text-slate-400 hover:text-white transition-colors"
+                    className="inline-block py-0.5 text-sm text-slate-400 hover:text-white rounded transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3B82F6]"
                   >
                     {link.label}
                   </a>
@@ -76,7 +78,7 @@ export const Footer: React.FC<FooterProps> = ({
               <li>
                 <a
                   href="mailto:sivarajapratheep175@gmail.com"
-                  className="hover:text-white transition-colors break-all"
+                  className="hover:text-white rounded transition-colors break-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3B82F6]"
                 >
                   sivarajapratheep175@gmail.com
                 </a>
@@ -86,7 +88,7 @@ export const Footer: React.FC<FooterProps> = ({
                   href="https://splanjox.vercel.app/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-white rounded transition-colors break-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3B82F6]"
                 >
                   https://splanjox.vercel.app/
                 </a>
@@ -105,14 +107,14 @@ export const Footer: React.FC<FooterProps> = ({
             <button
               type="button"
               onClick={onOpenPrivacy}
-              className="hover:text-white transition-colors cursor-pointer"
+              className="py-1 hover:text-white rounded transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3B82F6]"
             >
               Privacy Policy
             </button>
             <button
               type="button"
               onClick={onOpenTerms}
-              className="hover:text-white transition-colors cursor-pointer"
+              className="py-1 hover:text-white rounded transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3B82F6]"
             >
               Terms of Service
             </button>

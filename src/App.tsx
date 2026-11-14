@@ -46,11 +46,18 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-white text-[#080F1C] flex flex-col selection:bg-[#2563EB] selection:text-white">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:px-4 focus:py-2.5 focus:rounded-lg focus:bg-[#080F1C] focus:text-white focus:text-sm focus:font-semibold focus:shadow-lg"
+      >
+        Skip to main content
+      </a>
+
       <ScrollProgressBar />
 
       <Navbar onStartProject={() => scrollToSection('contact')} />
 
-      <main className="flex-grow">
+      <main id="main-content" tabIndex={-1} className="flex-grow focus:outline-none">
         <HeroSection
           onStartProject={() => scrollToSection('contact')}
           onExploreWork={() => scrollToSection('our-work')}

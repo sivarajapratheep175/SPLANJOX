@@ -11,7 +11,7 @@ const FILTERS: Array<'All' | WorkStatus> = ['All', 'Live', 'In Development', 'Ex
 function StatusBadge({ status }: { status: WorkStatus }) {
   if (status === 'Live') {
     return (
-      <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700">
+      <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 shrink-0">
         <CheckCircle2 className="w-3.5 h-3.5" />
         Live
       </span>
@@ -19,14 +19,14 @@ function StatusBadge({ status }: { status: WorkStatus }) {
   }
   if (status === 'In Development') {
     return (
-      <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563EB]">
+      <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] shrink-0">
         <Clock className="w-3.5 h-3.5" />
         In Development
       </span>
     );
   }
   return (
-    <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600">
+    <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 shrink-0">
       <FlaskConical className="w-3.5 h-3.5" />
       Experiment
     </span>
@@ -58,9 +58,9 @@ export const OurWorkSection: React.FC<OurWorkSectionProps> = ({
               Built to Solve Real Problems.
             </h2>
             <p className="mt-4 text-base sm:text-lg text-[#64748B] leading-relaxed">
-              Every project below reflects actual SPLANJOX engineering work,
-              active internal builds, and technical prototypes—presented
-              transparently without inflated claims.
+              Every entry below clearly distinguishes deployed work from active
+              internal engineering builds and prototypes—presented without
+              inflated metrics or fabricated client logos.
             </p>
           </div>
 
@@ -77,7 +77,7 @@ export const OurWorkSection: React.FC<OurWorkSectionProps> = ({
                   type="button"
                   onClick={() => setActiveFilter(filter)}
                   aria-pressed={isSelected}
-                  className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                  className={`min-h-[38px] px-3.5 py-2 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
                     isSelected
                       ? 'bg-[#080F1C] text-white'
                       : 'bg-white border border-slate-200 text-[#64748B] hover:text-[#080F1C] hover:border-slate-300'
@@ -94,7 +94,7 @@ export const OurWorkSection: React.FC<OurWorkSectionProps> = ({
           {visibleItems.map((project) => (
             <article
               key={project.id}
-              className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-7"
+              className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 sm:p-7"
             >
               <div className="space-y-5">
                 <div className="flex items-center justify-between gap-3">
@@ -130,26 +130,32 @@ export const OurWorkSection: React.FC<OurWorkSectionProps> = ({
                   {project.technologies.join(' · ')}
                 </p>
 
-                <div className="flex items-center justify-between gap-4">
+                <div className="flex flex-wrap items-center justify-between gap-3">
                   <button
                     type="button"
                     onClick={() => onDiscussSimilar(project.name)}
-                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#2563EB] hover:text-[#080F1C] transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1.5 min-h-[36px] text-sm font-semibold text-[#2563EB] hover:text-[#080F1C] rounded transition-colors cursor-pointer"
                   >
                     Build Something Similar
                     <ArrowRight className="w-4 h-4" />
                   </button>
 
-                  {project.liveUrl && (
+                  {project.liveUrl ? (
                     <a
                       href={project.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-slate-600 hover:text-[#080F1C] transition-colors"
+                      className="inline-flex items-center gap-1 min-h-[36px] text-xs font-semibold text-slate-700 hover:text-[#080F1C] rounded transition-colors"
                     >
-                      Visit
+                      Live Site
                       <ExternalLink className="w-3.5 h-3.5" />
                     </a>
+                  ) : (
+                    <span className="text-xs font-medium text-slate-500">
+                      {project.status === 'In Development'
+                        ? 'Internal Build'
+                        : 'Prototype'}
+                    </span>
                   )}
                 </div>
               </div>
